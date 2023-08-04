@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model docfile {
+  doc_no                 String       @id
+  doc_posting_date       String?
+  doc_type               String?
+  doc_location           String?
+  doc_status             String?
+  doc_createddate        String?
+  doc_createdby          String?
+  doc_lastupdate         String?
+  doc_lastuser           String?
+  doc_category           String?
+  doc_aircrafte          String?
+  doc_work_packagee      String?
+  doc_reason             String?
+  doc_returndate         String?
+  doc_retention_schedule String?
+  doc_last_received      String?
+  doc_last_rejected      String?
+  doc_filed              String?
+}
+
+model arc_swift {
+  equipment           String       @id @unique
+  material_number     String?
+  serial_number       String?
+  material_description String?
+  material_group      String?
+  functional_location String?
+  aircraft_reg        String?
+  notif_w3            String?
+  order_notif_w3      String?
+  notif_w4            String?
+  batch_notif_w4      String?
+  title               String?
+  po_number           String?
+  timestamp_pi        String?
+}
+
+model location {
+  doc_box       String    @id
+  doc_locations String?   @id
+}
+
+model User {
+  id String @id @default(uuid())
+  fullname String
+  email String @unique
+  password String
+  admin String
+  createdAt DateTime @default(now())
+}
+
+
+SELECT DISTINCT aircraft_reg FROM arc_swift;
