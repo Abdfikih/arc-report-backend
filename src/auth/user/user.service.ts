@@ -41,10 +41,10 @@ export class UserService {
     });
 
     if (!userData || userData.admin !== 'yes') {
-      return false; // The user is not an admin or not found
+      return false;
     }
 
-    return true; // The user is an admin
+    return true;
   }
 
   async validateUser(email: string, password: string) {

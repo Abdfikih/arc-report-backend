@@ -7,18 +7,22 @@ import {
   Delete,
   Body,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { ReportService } from './report.service';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('report')
+@UseGuards(AuthGuard)
 export class ReportController {
   constructor(private readonly reportService: ReportService) {}
 
   @Get('/view')
-  findAllViewData(
+  async findAllViewData(
     @Query('page', ParseIntPipe) page = 1,
     @Query('perPage', ParseIntPipe) perPage = 10,
   ) {
+    console.log('page : ', page);
     return this.reportService.findAllViewData(page, perPage);
   }
 

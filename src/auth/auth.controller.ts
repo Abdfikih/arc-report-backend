@@ -35,6 +35,7 @@ export class AuthController {
   }
 
   @Post('register')
+  @UseGuards(AuthGuard)
   async register(@Body() body: Prisma.UserCreateInput) {
     try {
       return await this.userService.create(body);
@@ -44,11 +45,13 @@ export class AuthController {
   }
 
   @Get('getallusers')
+  @UseGuards(AuthGuard)
   async findAllUsers() {
     return this.userService.findAllUsers();
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   async remove(@Param('id') id: string) {
     return this.userService.remove(id);
   }

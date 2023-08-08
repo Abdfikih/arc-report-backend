@@ -6,10 +6,13 @@ import {
   Body,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { SwiftService } from './swift.service';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('swift')
+@UseGuards(AuthGuard)
 export class SwiftController {
   constructor(private readonly swiftService: SwiftService) {}
 

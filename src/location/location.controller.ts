@@ -6,10 +6,13 @@ import {
   Body,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { LocationService } from './location.service';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('location')
+@UseGuards(AuthGuard)
 export class LocationController {
   constructor(private readonly locationService: LocationService) {}
 

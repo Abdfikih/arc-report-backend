@@ -6,10 +6,13 @@ import {
   Body,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { DocfileService } from './docfile.service';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('docfile')
+@UseGuards(AuthGuard)
 export class DocfileController {
   constructor(private readonly docfileService: DocfileService) {}
 
