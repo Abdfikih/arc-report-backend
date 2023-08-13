@@ -10,7 +10,7 @@ export class ReportService {
       const skip = (page - 1) * perPage;
       const take = perPage;
       const result = await this.prisma.$queryRaw`
-        SELECT * FROM view_get_data
+        SELECT * FROM view_get_data_new
         ORDER BY equipment 
         OFFSET ${skip}
         LIMIT ${take};
@@ -98,7 +98,7 @@ export class ReportService {
     try {
       const result = await this.prisma.$queryRaw`
         SELECT *
-        FROM view_get_data
+        FROM view_get_data_new
         WHERE material_description LIKE '%' || ${keyword} || '%'
            OR aircraft_reg LIKE '%' || ${keyword} || '%'
            OR doc_no LIKE '%' || ${keyword} || '%'
@@ -175,19 +175,19 @@ export class ReportService {
     console.log(data);
     try {
       const updatedArcSwift = await this.prisma.arc_swift.upsert({
-        where: { equipment: data.arc_swift.equipment }, // Use a combination of 'equipment', 'doc_no', and 'doc_box' as the unique identifier for the update
+        where: { equipment: data.arc_swift.equipment },
         create: data.arc_swift,
         update: data.arc_swift,
       });
 
       const updatedDocfile = await this.prisma.docfile.upsert({
-        where: { doc_no: data.docfile.doc_no }, // Use the 'key' field as the unique identifier for the update
+        where: { doc_no: data.docfile.doc_no },
         create: data.docfile,
         update: data.docfile,
       });
 
       const updatedLocation = await this.prisma.location.upsert({
-        where: { doc_box: data.location.doc_box }, // Use the 'key' field as the unique identifier for the update
+        where: { doc_box: data.location.doc_box },
         create: data.location,
         update: data.location,
       });
@@ -206,7 +206,7 @@ export class ReportService {
   async deleteData(data: any) {
     try {
       const deletedArcSwift = await this.prisma.arc_swift.delete({
-        where: { equipment: data.arc_swift.equipment }, // Use 'equipment' as the unique identifier for the delete
+        where: { equipment: data.arc_swift.equipment },
       });
 
       return {
@@ -221,7 +221,7 @@ export class ReportService {
   async getAircraftReg() {
     try {
       const result = await this.prisma.$queryRaw`
-      SELECT DISTINCT aircraft_reg FROM arc_swift;
+      SELECT DISTINCT aircraft_reg FROM view_get_data_new;
       `;
       return result;
     } catch (error) {
@@ -232,11 +232,30 @@ export class ReportService {
   async getOperator() {
     try {
       const result = await this.prisma.$queryRaw`
-      SELECT DISTINCT operator FROM arc_swift;
+      SELECT DISTINCT operator FROM view_get_data_new;
       `;
       return result;
     } catch (error) {
       throw new Error('Error executing custom query');
+    }
+  }
+
+  async createOldComponent(data) {
+    try {
+      const bodyData = JSON.parse(data.body);
+
+      const newComponent = await this.prisma.old_component.create({
+        data: {
+          identified: bodyData.identified,
+          aircraft_reg: bodyData.aircraft_reg,
+          ac_type: bodyData.ac_type,
+          operator: bodyData.operator,
+        },
+      });
+
+      return newComponent;
+    } catch (error) {
+      throw new Error(`Error creating old component: ${error.message}`);
     }
   }
 
@@ -245,7 +264,7 @@ export class ReportService {
     try {
       const result = await this.prisma.$queryRaw`
       SELECT distinct aircraft_reg
-      FROM arc_swift
+      FROM view_get_data_new
       WHERE operator= ${keyword}
       `;
       return result;

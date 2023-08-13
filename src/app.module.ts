@@ -6,6 +6,7 @@ import { SwiftModule } from './swift/swift.module';
 import { DocfileModule } from './docfile/docfile.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { LocationModule } from './location/location.module';
+import { OlderModule } from './older/older.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -16,6 +17,7 @@ import { AuthModule } from './auth/auth.module';
     SwiftModule,
     DocfileModule,
     LocationModule,
+    OlderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

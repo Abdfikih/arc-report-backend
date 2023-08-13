@@ -42,12 +42,14 @@ model arc_swift {
   batch_notif_w4      String?
   title               String?
   po_number           String?
+  ac_type             String?
+  operator            String?
   timestamp_pi        String?
 }
 
 model location {
   doc_box       String    @id
-  doc_locations String?   @id
+  doc_locations String?   
 }
 
 model User {
@@ -59,5 +61,9 @@ model User {
   createdAt DateTime @default(now())
 }
 
-
-SELECT DISTINCT aircraft_reg FROM arc_swift;
+model old_component{
+  identified         String  @id
+  aircraft_reg       String?
+  ac_type            String?
+  operator           String?
+}

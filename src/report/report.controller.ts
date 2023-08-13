@@ -92,6 +92,12 @@ export class ReportController {
     return await this.reportService.updateData(data);
   }
 
+  @Post('/add-old')
+  async createOldData(@Body() keyword: any): Promise<any> {
+    console.log('controller', keyword);
+    return await this.reportService.createOldComponent(keyword);
+  }
+
   @Delete('/remove')
   async deleteData(@Body() data: any): Promise<any> {
     return await this.reportService.deleteData(data);
