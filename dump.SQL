@@ -54,61 +54,6 @@ LEFT JOIN docfile ON arc_swift.order_notif_w3 = docfile.doc_no
                    OR arc_swift.po_number = docfile.doc_no
 
 -------------------------------------------------
-
-select * from view_get_data_time 
-        WHERE doc_posting_date IS NOT NULL
-        ORDER BY doc_posting_date DESC;
-
-        SELECT
-          aircraft_reg,
-          COUNT(*) as total_count
-        FROM view_get_data_time
-        WHERE doc_posting_date IS NOT NULL
-        GROUP BY aircraft_reg;
-
-        SELECT
-          aircraft_reg,
-          COUNT(*) as total_count
-        FROM view_get_data_time
-        WHERE doc_posting_date IS NOT NULL
-          AND DATE_PART('05', doc_posting_date)
-          AND DATE_PART('2023', doc_posting_date)
-        GROUP BY aircraft_reg;
-      
-        SELECT
-          aircraft_reg,
-          COUNT(*) as total_count
-        FROM view_get_data_time
-        GROUP BY aircraft_reg;
-
-        SELECT
-          aircraft_reg,
-          material_group,
-          COUNT(*) as total_count
-        FROM view_get_data_time
-        GROUP BY aircraft_reg, material_group;
-
-        SELECT
-          aircraft_reg,
-          material_group,
-          COUNT(*) as total_count,
-          COUNT(*) OVER (PARTITION BY aircraft_reg) as total_count_aircraft
-        FROM view_get_data_time
-        GROUP BY aircraft_reg, material_group;
-
-        SELECT
-          aircraft_reg,
-          COUNT(*) as total_count,
-          SUM(CASE WHEN material_group LIKE 'LLP%' AND doc_no IS NOT NULL THEN 1 ELSE 0 END) as "LPP-Linked",
-          SUM(CASE WHEN material_group LIKE 'LLP%' THEN 1 ELSE 0 END) as "LPP-Baseline",
-          SUM(CASE WHEN material_group LIKE 'TC%' AND doc_no IS NOT NULL THEN 1 ELSE 0 END) as "TC-Linked",
-          SUM(CASE WHEN material_group LIKE 'TC%' THEN 1 ELSE 0 END) as "TC-Baseline",
-          SUM(CASE WHEN material_group LIKE 'NON%' AND doc_no IS NOT NULL THEN 1 ELSE 0 END) as "NON TC-Linked",
-          SUM(CASE WHEN material_group LIKE 'NON%' THEN 1 ELSE 0 END) as "NON TC-Baseline",
-          SUM(CASE WHEN material_group IS NULL THEN 1 ELSE 0 END) as "OTHER"
-        FROM view_get_data_time
-        GROUP BY aircraft_reg;
-
 CREATE VIEW view_get_data_time_result AS
 SELECT
   ROW_NUMBER() OVER () as "id",
@@ -180,7 +125,6 @@ SELECT
   ROW_NUMBER() OVER () as "id",
   ac_type,
   operator,
-  aircraft_reg,
   SUM(CASE WHEN material_group LIKE 'LLP%' AND (doc_no IS NOT NULL OR title IS NOT NULL) THEN 1 ELSE 0 END) as "llp_linked",
   SUM(CASE WHEN material_group LIKE 'LLP%' THEN 1 ELSE 0 END) as "llp_baseline",
   ROUND(
@@ -270,34 +214,3 @@ CREATE VIEW view_count_status_general AS
     COUNT(CASE WHEN doc_box IS NULL AND title IS NULL THEN 1 END) AS total_unavailable
   FROM view_get_data_new;
   -----------------------------------------------------
-  SELECT
-    arc_swift.equipment,
-    arc_swift.material_number,
-    arc_swift.serial_number,
-    arc_swift.material_description,
-    arc_swift.material_group,
-    arc_swift.aircraft_reg,
-    docfile.doc_no,
-    location.doc_box,
-    location.doc_locations
-FROM
-    arc_swift
-LEFT JOIN
-    docfile
-ON
-    arc_swift.order_notif_w3 = docfile.doc_no
-    OR arc_swift.batch_notif_w4 = docfile.doc_no
-    OR arc_swift.po_number = docfile.doc_no
-LEFT JOIN
-    location
-ON
-    docfile.doc_location = location.doc_box
-WHERE
-    arc_swift.material_description LIKE '%PK%'
-    OR arc_swift.aircraft_reg LIKE '%PK%'
-    OR docfile.doc_no LIKE '%PK%';
-
-
-SELECT DISTINCT aircraft_reg FROM arc_swift;
-
-SELECT * FROM docfile order by doc_no desc limit 10;

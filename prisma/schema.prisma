@@ -8,7 +8,7 @@ datasource db {
 }
 
 model docfile {
-  doc_no                 String       @id
+  doc_no                 String  @id
   doc_posting_date       String?
   doc_type               String?
   doc_location           String?
@@ -29,41 +29,41 @@ model docfile {
 }
 
 model arc_swift {
-  equipment           String       @id @unique
-  material_number     String?
-  serial_number       String?
+  equipment            String  @id @unique
+  material_number      String?
+  serial_number        String?
   material_description String?
-  material_group      String?
-  functional_location String?
-  aircraft_reg        String?
-  notif_w3            String?
-  order_notif_w3      String?
-  notif_w4            String?
-  batch_notif_w4      String?
-  title               String?
-  po_number           String?
-  ac_type             String?
-  operator            String?
-  timestamp_pi        String?
+  material_group       String?
+  functional_location  String?
+  aircraft_reg         String?
+  notif_w3             String?
+  order_notif_w3       String?
+  notif_w4             String?
+  batch_notif_w4       String?
+  title                String?
+  po_number            String?
+  ac_type              String?
+  operator             String?
+  timestamp_pi         String?
 }
 
 model location {
-  doc_box       String    @id
-  doc_locations String?   
+  doc_box       String  @id
+  doc_locations String?
 }
 
 model User {
-  id String @id @default(uuid())
-  fullname String
-  email String @unique
-  password String
-  admin String
+  id        String   @id @default(uuid())
+  fullname  String
+  email     String   @unique
+  password  String
+  admin     String
   createdAt DateTime @default(now())
 }
 
-model old_component{
-  identified         String  @id
-  aircraft_reg       String?
-  ac_type            String?
-  operator           String?
+model old_component {
+  identified   String  @id
+  aircraft_reg String?
+  ac_type      String?
+  operator     String?
 }
